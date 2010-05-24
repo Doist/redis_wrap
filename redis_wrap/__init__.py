@@ -119,13 +119,13 @@ class HashFu:
         return get_redis(self.system).hget(self.name, key) or default
 
     def keys(self):
-        return get_redis(self.system).hkeys(self.name)
+        return get_redis(self.system).hkeys(self.name) or []
 
     def values(self):
-        return get_redis(self.system).hvals(self.name)
+        return get_redis(self.system).hvals(self.name) or []
 
     def __len__(self):
-        return get_redis(self.system).hlen(self.name)
+        return get_redis(self.system).hlen(self.name) or 0
 
     def __getitem__(self, key):
         val = self.get(key)
