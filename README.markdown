@@ -10,6 +10,11 @@ For best performance the wrappers are lazy and use direct Redis calls. E.g. __le
 redis-py can be downloaded from here:
 [redis-py on github](http://github.com/andymccurdy/redis-py)
 
+Quick install from [PyPi](http://pypi.python.org/pypi/redis_wrap):
+    
+    $ sudo easy_install redis_wrap
+
+
 Examples
 ========
 
