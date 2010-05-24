@@ -12,12 +12,16 @@ For best performance the wrappers are lazy and use direct Redis calls, for examp
     'grizzly' in get_hash('bears') # will call redis_client.hexists('bears', 'grizzly')
 
 redis-py can be downloaded from here:
-[redis-py on github](http://github.com/andymccurdy/redis-py)
 
-Quick install from [PyPi](http://pypi.python.org/pypi/redis_wrap):
+* [redis-py on github](http://github.com/andymccurdy/redis-py)
+
+You can also quick install it from [PyPi](http://pypi.python.org/pypi/redis_wrap):
     
-    $ sudo easy_install redis_wrap
+* $ sudo easy_install redis_wrap
 
+Related:
+
+* [Blog post about redis_wrap](http://amix.dk/blog/post/19508#redis-wrap-Python-wrapper-for-Redis-datatypes)
 
 Examples
 ========
