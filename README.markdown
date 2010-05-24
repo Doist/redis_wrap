@@ -8,8 +8,7 @@ Requires Redis 2.0+ and newest version of redis-py.
 For best performance the wrappers are lazy and use direct Redis calls. E.g. __len__ of list wrapper is implemented by calling llen.
 
 redis-py can be downloaded from here:
-http://github.com/andymccurdy/redis-py
-
+[redis-py on github](http://github.com/andymccurdy/redis-py)
 
 Examples
 ========
