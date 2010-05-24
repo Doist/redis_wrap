@@ -5,7 +5,11 @@ Implements a wrapper for Redis datatypes so they mimic the datatypes found in Py
 
 Requires Redis 2.0+ and newest version of redis-py.
 
-For best performance the wrappers are lazy and use direct Redis calls. E.g. __len__ of list wrapper is implemented by calling llen.
+For best performance the wrappers are lazy and use direct Redis calls, for example:
+    
+    len(get_list("bears")) # will call redis_client.llen("bears")
+
+    'grizzly' in get_hash('bears') # will call redis_client.hexists('bears', 'grizzly')
 
 redis-py can be downloaded from here:
 [redis-py on github](http://github.com/andymccurdy/redis-py)
