@@ -60,7 +60,7 @@ SYSTEMS = {
 }
 
 def setup_system(name, host, port):
-    SYSTEMS[name] = (host, port)
+    SYSTEMS[name] = redis.Redis(host=host, port=port)
 
 def get_redis(system='default'):
     return SYSTEMS[system]

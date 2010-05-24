@@ -11,16 +11,8 @@ ez_setup.use_setuptools()
 
 from setuptools import setup
 
-def list_files(path):
-    for fn in os.listdir(path):
-        if fn.startswith('.'):
-            continue
-        fn = os.path.join(path, fn)
-        if os.path.isfile(fn):
-            yield fn
-
 setup(name='redis_wrap',
-      version = '1.0',
+      version = '1.1',
       author="amix",
       author_email="amix@amix.dk",
       url="http://www.amix.dk/",
@@ -32,14 +24,14 @@ setup(name='redis_wrap',
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
       ],
-      packages=['redis_wrap'],
+      packages=['redis_wrap', 'test'],
       platforms=["Any"],
       license="BSD",
       keywords='redis wrapper',
       description="Implements a wrapper for Redis datatypes so they mimic the datatypes found in Python.",
       long_description="""\
 redis_wrap
-~~~~~~~~
+---------------
 
 Implements a wrapper for Redis datatypes so they mimic the datatypes found in Python.
 
@@ -52,7 +44,7 @@ redis-py can be downloaded from here:
 * http://github.com/andymccurdy/redis-py
 
 Examples
-========
+----------
 
 Example of list wrapper::
 
@@ -85,5 +77,5 @@ Example of set wrapper::
     for item in fishes:
         assert item == 'nemo'
 
-:copyright: 2010 by amix
-:license: BSD, see LICENSE for more details.""")
+Copyright: 2010 by amix
+License: BSD.""")
