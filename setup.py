@@ -6,13 +6,11 @@
 # your option) any later version.
 
 import os
-import ez_setup
-ez_setup.use_setuptools()
 
 from setuptools import setup
 
 setup(name='redis_wrap',
-      version = '1.1',
+      version = '1.3',
       author="amix",
       author_email="amix@amix.dk",
       url="http://www.amix.dk/",

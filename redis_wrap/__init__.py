@@ -94,6 +94,11 @@ class ListFu:
     def remove(self, value):
         get_redis(self.system).lrem(self.name, value)
 
+    def pop(self, index=None):
+        if index:
+            raise ValueError('Not supported')
+        return get_redis(self.system).rpop(self.name)
+
     def __len__(self):
         return get_redis(self.system).llen(self.name)
 
@@ -162,6 +167,9 @@ class SetFu:
         client = get_redis(self.system)
         for item in client.smembers(self.name):
             yield item
+
+    def __len__(self):
+        return len(get_redis(self.system).smembers(self.name))
 
     def __contains__(self, item):
         return get_redis(self.system).sismember(self.name, item)
