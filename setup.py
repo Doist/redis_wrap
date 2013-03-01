@@ -4,13 +4,10 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or (at
 # your option) any later version.
-
-import os
-
 from setuptools import setup
 
 setup(name='redis_wrap',
-      version = '1.3',
+      version = '1.3.1',
       author="amix",
       author_email="amix@amix.dk",
       url="http://www.amix.dk/",
@@ -22,7 +19,7 @@ setup(name='redis_wrap',
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
       ],
-      packages=['redis_wrap', 'test'],
+      packages=['redis_wrap'],
       platforms=["Any"],
       license="BSD",
       keywords='redis wrapper',
