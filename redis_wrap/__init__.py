@@ -99,8 +99,17 @@ class ListFu:
             raise ValueError('Not supported')
         return get_redis(self.system).rpop(self.name)
 
+    def list_trim(self, start, stop):
+        get_redis(self.system).ltrim(self.name, start, stop)
+
     def __len__(self):
         return get_redis(self.system).llen(self.name)
+
+    def __getitem__(self, key):
+        val = get_redis(self.system).lindex(self.name, key)
+        if not val:
+            raise KeyError
+        return val
 
     def __iter__(self):
         client = get_redis(self.system)

@@ -7,12 +7,12 @@
 from setuptools import setup
 
 setup(name='redis_wrap',
-      version = '1.3.1',
+      version = '1.4',
       author="amix",
       author_email="amix@amix.dk",
       url="http://www.amix.dk/",
       classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",

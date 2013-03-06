@@ -3,6 +3,7 @@ from redis_wrap import get_redis, get_list, get_hash, get_set
 
 def setup_module(module=None):
     get_redis().delete('bears')
+    get_redis().delete('deers')
     get_redis().delete('villains')
     get_redis().delete('fishes')
 
@@ -23,6 +24,22 @@ def test_list():
 
     bears.remove('grizzly')
     assert 'grizzly' not in bears
+
+
+def test_list_trim():
+    deers = get_list('deers')
+
+    for i in range(0, 100):
+        deers.append('rudolf_%s' % i)
+
+    assert len(deers) == 100
+
+    deers.list_trim(0, 5)
+
+    assert len(deers) == 6
+
+    assert deers[0] == 'rudolf_99'
+    assert deers[1] == 'rudolf_98'
 
 
 def test_hash():
@@ -55,5 +72,6 @@ def test_set():
 if __name__ == '__main__':
     setup_module()
     test_list()
+    test_list_trim()
     test_hash()
     test_set()
