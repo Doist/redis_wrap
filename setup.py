@@ -7,7 +7,7 @@
 from setuptools import setup
 
 setup(name='redis_wrap',
-      version = '1.4.1',
+      version = '1.4.2',
       author="amix",
       author_email="amix@amix.dk",
       url="http://www.amix.dk/",
