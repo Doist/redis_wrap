@@ -1,5 +1,5 @@
+import sys
 from redis_wrap import get_redis, get_list, get_hash, get_set
-
 
 def setup_module(module=None):
     get_redis().delete('bears')
@@ -7,6 +7,7 @@ def setup_module(module=None):
     get_redis().delete('villains')
     get_redis().delete('fishes')
 
+    print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_list():
     bears = get_list('bears')
@@ -25,6 +26,7 @@ def test_list():
     bears.remove('grizzly')
     assert 'grizzly' not in bears
 
+    print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_list_trim():
     deers = get_list('deers')
@@ -41,6 +43,7 @@ def test_list_trim():
     assert deers[0] == 'rudolf_99'
     assert deers[1] == 'rudolf_98'
 
+    print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_hash():
     villains = get_hash('villains')
@@ -56,7 +59,7 @@ def test_hash():
     del villains['riddler']
     assert len(villains.keys()) == 0
     assert 'riddler' not in villains
-
+    print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_set():
     fishes = get_set('fishes')
@@ -68,6 +71,7 @@ def test_set():
     for item in fishes:
         assert item == 'nemo'
 
+    print sys._getframe(0).f_code.co_name, 'ok.'
 
 if __name__ == '__main__':
     setup_module()

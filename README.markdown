@@ -58,3 +58,8 @@ Example of set wrapper:
 
     for item in fishes:
         assert item == 'nemo'
+
+Example of other redis connection::
+
+    setup_system('other', host='127.0.0.1', port=6379)
+    bears = get_list('bears', 'other')
