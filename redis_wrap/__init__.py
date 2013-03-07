@@ -47,6 +47,10 @@ Example of set wrapper::
     for item in fishes:
         assert item == 'nemo'
 
+Example of other redis connection::
+
+    setup_system('other', host='127.0.0.1', port=6379)
+    bears = get_list('bears', 'other')
 
 :copyright: 2010 by amix
 :license: BSD, see LICENSE for more details.
@@ -82,40 +86,39 @@ class ListFu:
 
     def __init__(self, name, system):
         self.name = name
-        self.system = system
+        self.conn = get_redis(system)
 
     def append(self, item):
-        get_redis(self.system).lpush(self.name, item)
+        self.conn.lpush(self.name, item)
 
     def extend(self, iterable):
         for item in iterable:
             self.append(item)
 
     def remove(self, value):
-        get_redis(self.system).lrem(self.name, value)
+        self.conn.lrem(self.name, value)
 
     def pop(self, index=None):
         if index:
             raise ValueError('Not supported')
-        return get_redis(self.system).rpop(self.name)
+        return self.conn.rpop(self.name)
 
     def list_trim(self, start, stop):
-        get_redis(self.system).ltrim(self.name, start, stop)
+        self.conn.ltrim(self.name, start, stop)
 
     def __len__(self):
-        return get_redis(self.system).llen(self.name)
+        return self.conn.llen(self.name)
 
     def __getitem__(self, key):
-        val = get_redis(self.system).lindex(self.name, key)
+        val = self.conn.lindex(self.name, key)
         if not val:
             raise KeyError
         return val
 
     def __iter__(self):
-        client = get_redis(self.system)
         i = 0
         while True:
-            items = client.lrange(self.name, i, i+30)
+            items = self.conn.lrange(self.name, i, i+30)
             if len(items) == 0:
                 raise StopIteration
             for item in items:
@@ -127,19 +130,19 @@ class HashFu:
 
     def __init__(self, name, system):
         self.name = name
-        self.system = system
+        self.conn = get_redis(system)
 
     def get(self, key, default=None):
-        return get_redis(self.system).hget(self.name, key) or default
+        return self.conn.hget(self.name, key) or default
 
     def keys(self):
-        return get_redis(self.system).hkeys(self.name) or []
+        return self.conn.hkeys(self.name) or []
 
     def values(self):
-        return get_redis(self.system).hvals(self.name) or []
+        return self.conn.hvals(self.name) or []
 
     def __len__(self):
-        return get_redis(self.system).hlen(self.name) or 0
+        return self.conn.hlen(self.name) or 0
 
     def __getitem__(self, key):
         val = self.get(key)
@@ -148,37 +151,37 @@ class HashFu:
         return val
 
     def __setitem__(self, key, value):
-        get_redis(self.system).hset(self.name, key, value)
+        self.conn.hset(self.name, key, value)
 
     def __delitem__(self, key):
-        get_redis(self.system).hdel(self.name, key)
+        self.conn.hdel(self.name, key)
 
     def __contains__(self, key):
-        return get_redis(self.system).hexists(self.name, key)
+        return self.conn.hexists(self.name, key)
 
 
 class SetFu:
 
     def __init__(self, name, system):
         self.name = name
-        self.system = system
+        self.conn = get_redis(system)
 
     def add(self, item):
-        get_redis(self.system).sadd(self.name, item)
+        self.conn.sadd(self.name, item)
 
     def remove(self, item):
-        get_redis(self.system).srem(self.name, item)
+        self.conn.srem(self.name, item)
 
     def pop(self, item):
-        return get_redis(self.system).spop(self.name, item)
+        return self.conn.spop(self.name, item)
 
     def __iter__(self):
-        client = get_redis(self.system)
-        for item in client.smembers(self.name):
+        for item in self.conn.smembers(self.name):
             yield item
 
     def __len__(self):
-        return len(get_redis(self.system).smembers(self.name))
+        return len(self.conn.smembers(self.name))
 
     def __contains__(self, item):
-        return get_redis(self.system).sismember(self.name, item)
+        return self.conn.sismember(self.name, item)
+
