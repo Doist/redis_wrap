@@ -180,7 +180,7 @@ class SetFu:
             yield item
 
     def __len__(self):
-        return len(self.conn.smembers(self.name))
+        return self.conn.scard(self.name)
 
     def __contains__(self, item):
         return self.conn.sismember(self.name, item)

@@ -63,9 +63,11 @@ def test_hash():
 
 def test_set():
     fishes = get_set('fishes')
+    assert len(fishes) == 0
     assert 'nemo' not in fishes
 
     fishes.add('nemo')
+    assert len(fishes) == 1
     assert 'nemo' in fishes
 
     for item in fishes:
