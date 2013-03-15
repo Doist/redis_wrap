@@ -112,14 +112,14 @@ class ListFu:
     def __getitem__(self, key):
         val = self.conn.lindex(self.name, key)
         if not val:
-            raise KeyError
+            raise IndexError
         return val
 
     def __setitem__(self, key, value):
         try:
             self.conn.lset(self.name, key, value)
         except redis.exceptions.ResponseError:
-            raise KeyError
+            raise IndexError
 
     def __iter__(self):
         i = 0
