@@ -115,6 +115,12 @@ class ListFu:
             raise KeyError
         return val
 
+    def __setitem__(self, key, value):
+        try:
+            self.conn.lset(self.name, key, value)
+        except redis.exceptions.ResponseError:
+            raise KeyError
+
     def __iter__(self):
         i = 0
         while True:

@@ -23,6 +23,16 @@ def test_list():
     bears.extend(['white bear', 'pedo bear'])
     assert len(bears) == 3
 
+    bears[2] = 'nice bear'
+    assert bears[2] == 'nice bear'
+
+    try:
+        bears[5] = 'dizzy bear'
+        assert 5 < len(bears)
+    except KeyError:
+        pass
+
+
     bears.remove('grizzly')
     assert 'grizzly' not in bears
 
