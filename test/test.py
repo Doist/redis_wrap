@@ -29,8 +29,10 @@ def test_list():
     try:
         bears[5] = 'dizzy bear'
         assert 5 < len(bears)
-    except IndexError:
+    except KeyError:
         pass
+
+    assert bears[1:2] == ['white bear', 'nice bear']
 
     bears.remove('grizzly')
     assert 'grizzly' not in bears

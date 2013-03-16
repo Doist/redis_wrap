@@ -110,16 +110,19 @@ class ListFu:
         return self.conn.llen(self.name)
 
     def __getitem__(self, key):
+        if isinstance(key, slice):
+            return self.conn.lrange(self.name, key.start, key.stop)
+
         val = self.conn.lindex(self.name, key)
         if not val:
-            raise IndexError
+            raise KeyError
         return val
 
     def __setitem__(self, key, value):
         try:
             self.conn.lset(self.name, key, value)
         except redis.exceptions.ResponseError:
-            raise IndexError
+            raise KeyError
 
     def __iter__(self):
         i = 0
