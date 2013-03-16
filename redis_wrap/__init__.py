@@ -89,7 +89,7 @@ class ListFu:
         self.conn = get_redis(system)
 
     def append(self, item):
-        self.conn.lpush(self.name, item)
+        self.conn.rpush(self.name, item)
 
     def extend(self, iterable):
         for item in iterable:

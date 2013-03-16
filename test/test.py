@@ -32,6 +32,7 @@ def test_list():
     except IndexError:
         pass
 
+    bears.extend(['polar bear', 'gummy bear'])
     assert bears[1:2] == ['white bear', 'nice bear']
 
     bears.remove('grizzly')
@@ -51,8 +52,8 @@ def test_list_trim():
 
     assert len(deers) == 6
 
-    assert deers[0] == 'rudolf_99'
-    assert deers[1] == 'rudolf_98'
+    assert deers[0] == 'rudolf_0'
+    assert deers[1] == 'rudolf_1'
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 
