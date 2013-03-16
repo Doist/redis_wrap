@@ -26,10 +26,10 @@ def test_list():
     bears[2] = 'nice bear'
     assert bears[2] == 'nice bear'
 
+    assert 5 > len(bears)
     try:
         bears[5] = 'dizzy bear'
-        assert 5 < len(bears)
-    except KeyError:
+    except IndexError:
         pass
 
     assert bears[1:2] == ['white bear', 'nice bear']
