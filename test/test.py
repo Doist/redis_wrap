@@ -34,6 +34,7 @@ def test_list():
 
     bears.extend(['polar bear', 'gummy bear'])
     assert bears[1:2] == ['white bear', 'nice bear']
+    assert bears[2:4] == ['nice bear', 'polar bear', 'gummy bear']
 
     bears.remove('grizzly')
     assert 'grizzly' not in bears
