@@ -23,6 +23,19 @@ def test_list():
     bears.extend(['white bear', 'pedo bear'])
     assert len(bears) == 3
 
+    bears[2] = 'nice bear'
+    assert bears[2] == 'nice bear'
+
+    assert 5 > len(bears)
+    try:
+        bears[5] = 'dizzy bear'
+    except IndexError:
+        pass
+
+    bears.extend(['polar bear', 'gummy bear'])
+    assert bears[1:2] == ['white bear', 'nice bear']
+    assert bears[2:4] == ['nice bear', 'polar bear', 'gummy bear']
+
     bears.remove('grizzly')
     assert 'grizzly' not in bears
 
@@ -40,8 +53,8 @@ def test_list_trim():
 
     assert len(deers) == 6
 
-    assert deers[0] == 'rudolf_99'
-    assert deers[1] == 'rudolf_98'
+    assert deers[0] == 'rudolf_0'
+    assert deers[1] == 'rudolf_1'
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 
@@ -63,9 +76,11 @@ def test_hash():
 
 def test_set():
     fishes = get_set('fishes')
+    assert len(fishes) == 0
     assert 'nemo' not in fishes
 
     fishes.add('nemo')
+    assert len(fishes) == 1
     assert 'nemo' in fishes
 
     for item in fishes:

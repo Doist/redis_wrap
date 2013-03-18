@@ -89,7 +89,7 @@ class ListFu:
         self.conn = get_redis(system)
 
     def append(self, item):
-        self.conn.lpush(self.name, item)
+        self.conn.rpush(self.name, item)
 
     def extend(self, iterable):
         for item in iterable:
@@ -110,10 +110,19 @@ class ListFu:
         return self.conn.llen(self.name)
 
     def __getitem__(self, key):
+        if isinstance(key, slice):
+            return self.conn.lrange(self.name, key.start, key.stop)
+
         val = self.conn.lindex(self.name, key)
         if not val:
-            raise KeyError
+            raise IndexError
         return val
+
+    def __setitem__(self, key, value):
+        try:
+            self.conn.lset(self.name, key, value)
+        except redis.exceptions.ResponseError:
+            raise IndexError
 
     def __iter__(self):
         i = 0
@@ -180,7 +189,7 @@ class SetFu:
             yield item
 
     def __len__(self):
-        return len(self.conn.smembers(self.name))
+        return self.conn.scard(self.name)
 
     def __contains__(self, item):
         return self.conn.sismember(self.name, item)
