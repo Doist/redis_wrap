@@ -1,6 +1,14 @@
 import sys
 from redis_wrap import get_redis, get_list, get_hash, get_set
 
+def raises(f, excpt):
+    try:
+        f()
+        return False
+    except excpt:
+        return True
+
+
 def setup_module(module=None):
     get_redis().delete('bears')
     get_redis().delete('deers')
@@ -79,11 +87,7 @@ def test_set():
     assert len(fishes) == 0
     assert 'nemo' not in fishes
 
-    try:
-        fishes.remove('nemo')
-        assert false and 'removing nonexistant member should fail with KeyError'
-    except KeyError:
-        pass
+    assert raises(lambda: fishes.remove('nemo'), KeyError)
 
     fishes.discard('nemo')      # it's ok to .discard() nonexistant items
 
@@ -96,6 +100,10 @@ def test_set():
 
     fishes.remove('nemo')
     assert len(fishes) == 0
+
+    fishes.add('dori')
+    assert fishes.pop() == 'dori'
+    assert raises(lambda: fishes.pop(), KeyError)
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 

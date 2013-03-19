@@ -186,8 +186,11 @@ class SetFu:
         if r < 1:
             raise KeyError
 
-    def pop(self, item):
-        return self.conn.spop(self.name, item)
+    def pop(self):
+        r = self.conn.spop(self.name)
+        if r == None:
+            raise KeyError
+        return r
 
     def __iter__(self):
         for item in self.conn.smembers(self.name):
