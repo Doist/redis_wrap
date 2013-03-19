@@ -210,6 +210,13 @@ class SetFu:
                 if item not in other:
                     self.discard(item)
 
+    def difference_update(self, other):
+        if isinstance(other, SetFu):
+            self.conn.sdiffstore(self.name, self.name, other.name)
+        else:
+            for item in other:
+                self.discard(item)
+
     def __iter__(self):
         for item in self.conn.smembers(self.name):
             yield item
@@ -220,10 +227,15 @@ class SetFu:
     def __contains__(self, item):
         return self.conn.sismember(self.name, item)
 
-    def __ior__(self, other):
-        self.update(other)
+    def __isub__(self, other):
+        self.difference_update(other)
         return self
 
     def __iand__(self, other):
         self.intersection_update(other)
         return self
+
+    def __ior__(self, other):
+        self.update(other)
+        return self
+
