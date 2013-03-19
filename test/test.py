@@ -142,6 +142,20 @@ def test_set():
     fishes -= other_fishes
     assert set(fishes) == set(['nemo','marlin', 'dory'])
 
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes.symmetric_difference_update(('gill', 'bloat', 'flo'))
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes ^= ('gill', 'bloat', 'flo')
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes ^= other_fishes
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
     print sys._getframe(0).f_code.co_name, 'ok.'
 
 if __name__ == '__main__':

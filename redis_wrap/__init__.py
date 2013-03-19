@@ -217,6 +217,21 @@ class SetFu:
             for item in other:
                 self.discard(item)
 
+    def symmetric_difference_update(self, other):
+        if isinstance(other, SetFu):
+            with self.conn.pipeline(transaction=True) as trans:
+                trans.sunionstore('__transientkey-1__', self.name, other.name)
+                trans.sinterstore('__transientkey-2__', self.name, other.name)
+                trans.sdiffstore(self.name, '__transientkey-1__', '__transientkey-2__')
+                trans.delete('__transientkey-1__', '__transientkey-2__')
+                trans.execute()
+        else:
+            for item in other:
+                if item in self:
+                    self.remove(item)
+                else:
+                    self.add(item)
+
     def __iter__(self):
         for item in self.conn.smembers(self.name):
             yield item
@@ -233,6 +248,10 @@ class SetFu:
 
     def __iand__(self, other):
         self.intersection_update(other)
+        return self
+
+    def __ixor__(self, other):
+        self.symmetric_difference_update(other)
         return self
 
     def __ior__(self, other):
