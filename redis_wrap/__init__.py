@@ -202,6 +202,14 @@ class SetFu:
             for item in other:
                 self.add(item)
 
+    def intersection_update(self, other):
+        if isinstance(other, SetFu):
+            self.conn.sinterstore(self.name, self.name, other.name)
+        else:
+            for item in self:
+                if item not in other:
+                    self.discard(item)
+
     def __iter__(self):
         for item in self.conn.smembers(self.name):
             yield item
@@ -216,3 +224,6 @@ class SetFu:
         self.update(other)
         return self
 
+    def __iand__(self, other):
+        self.intersection_update(other)
+        return self

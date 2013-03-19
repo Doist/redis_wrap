@@ -118,9 +118,14 @@ def test_set():
     other_fishes = get_set('other_fishes')
     other_fishes.update(('gill', 'bloat', 'flo'))
     fishes |= other_fishes
-    assert set(fishes) == set (['nemo','marlin', 'dory', 'crush', 'gill', 'bloat', 'flo'])
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'crush', 'gill', 'bloat', 'flo'])
 
-
+    fishes.intersection_update(('nemo','marlin', 'dory', 'crush', 'gill', 'deb', 'bloat'))
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'crush', 'gill', 'bloat'])
+    fishes &= ('nemo','marlin', 'dory', 'gill', 'bloat', 'gurgle')
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'gill', 'bloat'])
+    fishes &= other_fishes
+    assert set(fishes) == set(['gill', 'bloat'])
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 
