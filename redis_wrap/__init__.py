@@ -196,8 +196,11 @@ class SetFu:
         self.conn.delete(self.name)
 
     def update(self, other):
-        for item in other:
-            self.add(item)
+        if isinstance(other, SetFu):
+            self.conn.sunionstore(self.name, self.name, other.name)
+        else:
+            for item in other:
+                self.add(item)
 
     def __iter__(self):
         for item in self.conn.smembers(self.name):

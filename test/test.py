@@ -101,20 +101,26 @@ def test_set():
     fishes.remove('nemo')
     assert len(fishes) == 0
 
-    fishes.add('dori')
-    assert fishes.pop() == 'dori'
+    fishes.add('dory')
+    assert fishes.pop() == 'dory'
     assert raises(lambda: fishes.pop(), KeyError)
 
-    fishes.add('martin')
+    fishes.add('marlin')
     assert len(fishes) == 1
     fishes.clear()
     assert len(fishes) == 0
 
-    numbers = get_set('numbers')
-    fishes.update(('one','two'))
-    assert set(fishes) == set (['one','two'])
-    fishes |= ('three','four')
-    assert set(fishes) == set (['one','two', 'three','four'])
+    fishes.update(('nemo','marlin'))
+    assert set(fishes) == set (['nemo','marlin'])
+    fishes |= ('dory','crush')
+    assert set(fishes) == set (['nemo','marlin', 'dory', 'crush'])
+
+    other_fishes = get_set('other_fishes')
+    other_fishes.update(('gill', 'bloat', 'flo'))
+    fishes |= other_fishes
+    assert set(fishes) == set (['nemo','marlin', 'dory', 'crush', 'gill', 'bloat', 'flo'])
+
+
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 
