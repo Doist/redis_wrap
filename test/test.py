@@ -105,6 +105,17 @@ def test_set():
     assert fishes.pop() == 'dori'
     assert raises(lambda: fishes.pop(), KeyError)
 
+    fishes.add('martin')
+    assert len(fishes) == 1
+    fishes.clear()
+    assert len(fishes) == 0
+
+    numbers = get_set('numbers')
+    fishes.update(('one','two'))
+    assert set(fishes) == set (['one','two'])
+    fishes |= ('three','four')
+    assert set(fishes) == set (['one','two', 'three','four'])
+
     print sys._getframe(0).f_code.co_name, 'ok.'
 
 if __name__ == '__main__':

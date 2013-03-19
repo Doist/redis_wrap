@@ -192,6 +192,13 @@ class SetFu:
             raise KeyError
         return r
 
+    def clear(self):
+        self.conn.delete(self.name)
+
+    def update(self, other):
+        for item in other:
+            self.add(item)
+
     def __iter__(self):
         for item in self.conn.smembers(self.name):
             yield item
@@ -201,4 +208,8 @@ class SetFu:
 
     def __contains__(self, item):
         return self.conn.sismember(self.name, item)
+
+    def __ior__(self, other):
+        self.update(other)
+        return self
 
