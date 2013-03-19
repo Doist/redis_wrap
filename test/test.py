@@ -79,12 +79,23 @@ def test_set():
     assert len(fishes) == 0
     assert 'nemo' not in fishes
 
+    try:
+        fishes.remove('nemo')
+        assert false and 'removing nonexistant member should fail with KeyError'
+    except KeyError:
+        pass
+
+    fishes.discard('nemo')      # it's ok to .discard() nonexistant items
+
     fishes.add('nemo')
     assert len(fishes) == 1
     assert 'nemo' in fishes
 
     for item in fishes:
         assert item == 'nemo'
+
+    fishes.remove('nemo')
+    assert len(fishes) == 0
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 

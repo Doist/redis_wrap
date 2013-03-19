@@ -178,8 +178,13 @@ class SetFu:
     def add(self, item):
         self.conn.sadd(self.name, item)
 
-    def remove(self, item):
+    def discard(self, item):
         self.conn.srem(self.name, item)
+
+    def remove(self, item):
+        r = self.conn.srem(self.name, item)
+        if r < 1:
+            raise KeyError
 
     def pop(self, item):
         return self.conn.spop(self.name, item)
