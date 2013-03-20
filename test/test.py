@@ -83,6 +83,10 @@ def test_hash():
     del villains['riddler']
     assert len(villains.keys()) == 0
     assert 'riddler' not in villains
+
+    villains['drZero'] = ''
+    assert villains['drZero'] == ''
+
     print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_set():

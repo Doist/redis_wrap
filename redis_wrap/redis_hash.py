@@ -7,7 +7,9 @@ class HashFu:
         self.conn = get_redis(system)
 
     def get(self, key, default=None):
-        return self.conn.hget(self.name, key) or default
+        r = self.conn.hget(self.name, key)
+        if r == None: r = default
+        return r
 
     def keys(self):
         return self.conn.hkeys(self.name) or []
@@ -15,16 +17,22 @@ class HashFu:
     def values(self):
         return self.conn.hvals(self.name) or []
 
+    def clear(self):
+        self.conn.delete(self.name)
+
+    def iter(self):
+        for k in self.keys():
+            yield k
+
     def __len__(self):
         return self.conn.hlen(self.name) or 0
 
     def __iter__(self):
-        for k in self.keys():
-            yield k
+        return self.iter()
 
     def __getitem__(self, key):
         val = self.get(key)
-        if not val:
+        if val == None:
             raise KeyError
         return val
 
