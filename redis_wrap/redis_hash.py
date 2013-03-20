@@ -18,6 +18,10 @@ class HashFu:
     def __len__(self):
         return self.conn.hlen(self.name) or 0
 
+    def __iter__(self):
+        for k in self.keys():
+            yield k
+
     def __getitem__(self, key):
         val = self.get(key)
         if not val:

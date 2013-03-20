@@ -19,6 +19,7 @@ def setup_module(module=None):
 
 def test_list():
     bears = get_list('bears')
+    assert len(bears) == 0
 
     bears.append('grizzly')
     assert len(bears) == 1
@@ -76,6 +77,8 @@ def test_hash():
 
     assert len(villains.keys()) == 1
     assert villains.values() == ['Edward Nigma']
+
+    assert list(villains) == ['riddler']
 
     del villains['riddler']
     assert len(villains.keys()) == 0
