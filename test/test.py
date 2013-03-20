@@ -80,12 +80,20 @@ def test_hash():
 
     assert list(villains) == ['riddler']
 
+    assert villains.items() == [('riddler', 'Edward Nigma')]
+
     del villains['riddler']
     assert len(villains.keys()) == 0
     assert 'riddler' not in villains
 
     villains['drZero'] = ''
     assert villains['drZero'] == ''
+
+    assert villains.pop('drZero') == ''
+    assert 'drZero' not in villains
+
+    assert raises(lambda: villains.pop('Mysterio'), KeyError)
+    assert villains.pop('Mysterio', 'Quentin Beck') == 'Quentin Beck'
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 

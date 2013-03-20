@@ -17,6 +17,19 @@ class HashFu:
     def values(self):
         return self.conn.hvals(self.name) or []
 
+    def items(self):
+        return self.conn.hgetall(self.name).items()
+
+    def pop(self, key, *args):
+        if key in self:
+            r = self[key]
+            del self[key]
+            return r
+        if len(args) == 1:
+            return args[0]
+        raise KeyError
+
+
     def clear(self):
         self.conn.delete(self.name)
 
