@@ -21,14 +21,18 @@ class HashFu:
         return self.conn.hgetall(self.name).items()
 
     def pop(self, key, *args):
-        if key in self:
-            r = self[key]
-            del self[key]
-            return r
-        if len(args) == 1:
+        n = self.name
+        def f(pipe):
+            pipe.multi()
+            pipe.hget(n, key)
+            pipe.hdel(n, key)
+        r = self.conn.transaction(f, key)
+        if r and r[1]:
+            return r[0]
+        elif args:
             return args[0]
-        raise KeyError
-
+        else:
+            raise KeyError
 
     def clear(self):
         self.conn.delete(self.name)
