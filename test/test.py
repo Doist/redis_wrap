@@ -95,6 +95,23 @@ def test_hash():
     assert raises(lambda: villains.pop('Mysterio'), KeyError)
     assert villains.pop('Mysterio', 'Quentin Beck') == 'Quentin Beck'
 
+    villains.update({'drEvil':'Douglas Powers'})
+    villains.update([('joker','Jack'),('penguin','Oswald Chesterfield Cobblepot')])
+    assert set(villains.items()) == set([
+        ('drEvil','Douglas Powers'),
+        ('joker','Jack'),
+        ('penguin','Oswald Chesterfield Cobblepot')])
+
+    other_villains = get_hash('minions')
+    other_villains.update(lizard='Curt Connors', rhino='Aleksei Sytsevich')
+    villains.update(other_villains)
+    assert set(villains.items()) == set([
+        ('drEvil','Douglas Powers'),
+        ('joker','Jack'),
+        ('penguin','Oswald Chesterfield Cobblepot'),
+        ('lizard','Curt Connors'),
+        ('rhino', 'Aleksei Sytsevich')])
+
     print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_set():

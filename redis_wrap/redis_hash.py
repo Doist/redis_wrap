@@ -30,6 +30,19 @@ class HashFu (redis_obj):
         else:
             raise KeyError
 
+    def update(self, *args, **kwargs):
+        for o in args:
+            self._update(o)
+        self._update(kwargs)
+
+    def _update(self, other):
+        if hasattr(other, 'items'):
+            for k,v in other.items():
+                self[k] = v
+        else:
+            for k,v in other:
+                self[k] = v
+
     def iter(self):
         for k in self.keys():
             yield k
