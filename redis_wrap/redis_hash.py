@@ -1,10 +1,6 @@
 from redis_systems import *
 
-class HashFu:
-
-    def __init__(self, name, system):
-        self.name = name
-        self.conn = get_redis(system)
+class HashFu (redis_obj):
 
     def get(self, key, default=None):
         r = self.conn.hget(self.name, key)
@@ -33,9 +29,6 @@ class HashFu:
             return args[0]
         else:
             raise KeyError
-
-    def clear(self):
-        self.conn.delete(self.name)
 
     def iter(self):
         for k in self.keys():

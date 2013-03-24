@@ -1,11 +1,7 @@
 
 from redis_systems import *
 
-class SetFu:
-
-    def __init__(self, name, system):
-        self.name = name
-        self.conn = get_redis(system)
+class SetFu (redis_obj):
 
     def add(self, item):
         self.conn.sadd(self.name, item)
@@ -23,9 +19,6 @@ class SetFu:
         if r == None:
             raise KeyError
         return r
-
-    def clear(self):
-        self.conn.delete(self.name)
 
     def update(self, other):
         if isinstance(other, SetFu):

@@ -1,11 +1,7 @@
 
 from redis_systems import *
 
-class ListFu:
-
-    def __init__(self, name, system):
-        self.name = name
-        self.conn = get_redis(system)
+class ListFu (redis_obj):
 
     def append(self, item):
         self.conn.rpush(self.name, item)

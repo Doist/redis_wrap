@@ -11,3 +11,14 @@ def setup_system(name, host, port, **kw):
 
 def get_redis(system='default'):
     return SYSTEMS[system]
+
+
+class redis_obj:
+
+    def __init__(self, name, system):
+        self.name = name
+        self.conn = get_redis(system)
+
+    def clear(self):
+        self.conn.delete(self.name)
+
