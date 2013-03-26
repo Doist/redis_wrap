@@ -1,5 +1,5 @@
 import sys
-from redis_wrap import get_redis, get_list, get_hash, get_set
+from redis_wrap import get_redis, get_list, get_hash, get_set, get_bitset
 
 def raises(f, excpt):
     try:
@@ -190,9 +190,42 @@ def test_set():
     assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
     print sys._getframe(0).f_code.co_name, 'ok.'
 
+def test_bitset():
+    users = get_bitset('users')
+    users.clear()
+    assert len(users) == 0
+
+    assert 3 not in users
+    users.add(3)
+    assert len(users) == 1
+    assert 3 in users
+
+    assert raises(lambda: users.remove(9), KeyError)
+    users.discard(9)
+    users.add(7)
+    users.remove(7)
+
+    users |= (5,4)
+    assert set(users) == set([3,4,5])
+
+    others = get_bitset('others')
+    others |= (4,6,8)
+    assert set(others) == set([4,6,8])
+    users |= others
+    assert set(users) == set([3,4,5,6,8])
+
+    users &= (4,5,6,7,8)
+    assert set(users) == set([4,5,6,8])
+
+    users.clear()
+    assert len(users) == 0
+
+    print sys._getframe(0).f_code.co_name, 'ok.'
+
 if __name__ == '__main__':
     setup_module()
     test_list()
     test_list_trim()
     test_hash()
     test_set()
+    test_bitset()

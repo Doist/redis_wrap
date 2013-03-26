@@ -61,6 +61,7 @@ from redis_systems import *
 from redis_list import ListFu
 from redis_hash import HashFu
 from redis_set import SetFu
+from redis_bitset import BitsetFu
 
 #--- Decorators ----------------------------------------------
 def get_list(name, system='default'):
@@ -72,4 +73,5 @@ def get_hash(name, system='default'):
 def get_set(name, system='default'):
     return SetFu(name, system)
 
-
+def get_bitset(name, system='default'):
+    return BitsetFu(name, system)
