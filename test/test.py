@@ -1,5 +1,13 @@
 import sys
-from redis_wrap import get_redis, get_list, get_hash, get_set
+from redis_wrap import get_redis, get_list, get_hash, get_set, get_bitset
+
+def raises(f, excpt):
+    try:
+        f()
+        return False
+    except excpt:
+        return True
+
 
 def setup_module(module=None):
     get_redis().delete('bears')
@@ -11,6 +19,7 @@ def setup_module(module=None):
 
 def test_list():
     bears = get_list('bears')
+    assert len(bears) == 0
 
     bears.append('grizzly')
     assert len(bears) == 1
@@ -69,9 +78,40 @@ def test_hash():
     assert len(villains.keys()) == 1
     assert villains.values() == ['Edward Nigma']
 
+    assert list(villains) == ['riddler']
+
+    assert villains.items() == [('riddler', 'Edward Nigma')]
+
     del villains['riddler']
     assert len(villains.keys()) == 0
     assert 'riddler' not in villains
+
+    villains['drZero'] = ''
+    assert villains['drZero'] == ''
+
+    assert villains.pop('drZero') == ''
+    assert 'drZero' not in villains
+
+    assert raises(lambda: villains.pop('Mysterio'), KeyError)
+    assert villains.pop('Mysterio', 'Quentin Beck') == 'Quentin Beck'
+
+    villains.update({'drEvil':'Douglas Powers'})
+    villains.update([('joker','Jack'),('penguin','Oswald Chesterfield Cobblepot')])
+    assert set(villains.items()) == set([
+        ('drEvil','Douglas Powers'),
+        ('joker','Jack'),
+        ('penguin','Oswald Chesterfield Cobblepot')])
+
+    other_villains = get_hash('minions')
+    other_villains.update(lizard='Curt Connors', rhino='Aleksei Sytsevich')
+    villains.update(other_villains)
+    assert set(villains.items()) == set([
+        ('drEvil','Douglas Powers'),
+        ('joker','Jack'),
+        ('penguin','Oswald Chesterfield Cobblepot'),
+        ('lizard','Curt Connors'),
+        ('rhino', 'Aleksei Sytsevich')])
+
     print sys._getframe(0).f_code.co_name, 'ok.'
 
 def test_set():
@@ -79,12 +119,106 @@ def test_set():
     assert len(fishes) == 0
     assert 'nemo' not in fishes
 
+    assert raises(lambda: fishes.remove('nemo'), KeyError)
+
+    fishes.discard('nemo')      # it's ok to .discard() nonexistant items
+
     fishes.add('nemo')
     assert len(fishes) == 1
     assert 'nemo' in fishes
 
     for item in fishes:
         assert item == 'nemo'
+
+    fishes.remove('nemo')
+    assert len(fishes) == 0
+
+    fishes.add('dory')
+    assert fishes.pop() == 'dory'
+    assert raises(lambda: fishes.pop(), KeyError)
+
+    fishes.add('marlin')
+    assert len(fishes) == 1
+    fishes.clear()
+    assert len(fishes) == 0
+
+    fishes.update(('nemo','marlin'))
+    assert set(fishes) == set (['nemo','marlin'])
+    fishes |= ('dory','crush')
+    assert set(fishes) == set (['nemo','marlin', 'dory', 'crush'])
+
+    other_fishes = get_set('other_fishes')
+    other_fishes.update(('gill', 'bloat', 'flo'))
+    fishes |= other_fishes
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'crush', 'gill', 'bloat', 'flo'])
+
+    fishes.intersection_update(('nemo','marlin', 'dory', 'crush', 'gill', 'deb', 'bloat'))
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'crush', 'gill', 'bloat'])
+    fishes &= ('nemo','marlin', 'dory', 'gill', 'bloat', 'gurgle')
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'gill', 'bloat'])
+    fishes &= other_fishes
+    assert set(fishes) == set(['gill', 'bloat'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes.difference_update(('gill', 'bloat', 'flo'))
+    assert set(fishes) == set(['nemo','marlin', 'dory'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes -= ('gill', 'bloat', 'flo')
+    assert set(fishes) == set(['nemo','marlin', 'dory'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes -= other_fishes
+    assert set(fishes) == set(['nemo','marlin', 'dory'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes.symmetric_difference_update(('gill', 'bloat', 'flo'))
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes ^= ('gill', 'bloat', 'flo')
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
+
+    fishes.clear()
+    fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
+    fishes ^= other_fishes
+    assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
+    print sys._getframe(0).f_code.co_name, 'ok.'
+
+def test_bitset():
+    users = get_bitset('users')
+    users.clear()
+    assert len(users) == 0
+
+    assert 3 not in users
+    users.add(3)
+    assert len(users) == 1
+    assert 3 in users
+
+    assert raises(lambda: users.remove(9), KeyError)
+    users.discard(9)
+    users.add(7)
+    users.remove(7)
+
+    users |= (5,4)
+    assert set(users) == set([3,4,5])
+
+    others = get_bitset('others')
+    others |= (4,6,8)
+    assert set(others) == set([4,6,8])
+    users |= others
+    assert set(users) == set([3,4,5,6,8])
+
+    users &= (4,5,6,7,8)
+    assert set(users) == set([4,5,6,8])
+
+    users.clear()
+    assert len(users) == 0
 
     print sys._getframe(0).f_code.co_name, 'ok.'
 
@@ -94,3 +228,4 @@ if __name__ == '__main__':
     test_list_trim()
     test_hash()
     test_set()
+    test_bitset()
