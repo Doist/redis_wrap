@@ -7,9 +7,11 @@ Requires Redis 2.0+ and newest version of redis-py.
 
 For best performance the wrappers are lazy and use direct Redis calls, for example:
     
-    len(get_list("bears")) # will call redis_client.llen("bears")
+~~~python
+len(get_list("bears")) # will call redis_client.llen("bears")
 
-    'grizzly' in get_hash('bears') # will call redis_client.hexists('bears', 'grizzly')
+'grizzly' in get_hash('bears') # will call redis_client.hexists('bears', 'grizzly')
+~~~
 
 redis-py can be downloaded from here:
 
@@ -28,38 +30,44 @@ Examples
 
 Example of list wrapper:
 
-    bears = get_list('bears')
-    bears.append('grizzly')
-    assert len(bears) == 1
-    assert 'grizzly' in bears
-
+~~~python
+bears = get_list('bears')
+bears.append('grizzly')
+assert len(bears) == 1
+assert 'grizzly' in bears
+~~~
 
 Example of hash wrapper:
 
-    villains = get_hash('villains')
-    assert 'riddler' not in villains
+~~~python
+villains = get_hash('villains')
+assert 'riddler' not in villains
 
-    villains['riddler'] = 'Edward Nigma'
-    assert 'riddler' in villains
+villains['riddler'] = 'Edward Nigma'
+assert 'riddler' in villains
 
-    assert len(villains.keys()) == 1
+assert len(villains.keys()) == 1
 
-    del villains['riddler']
-    assert len(villains) == 0
-
+del villains['riddler']
+assert len(villains) == 0
+~~~
 
 Example of set wrapper:
 
-    fishes = get_set('fishes')
-    assert 'nemo' not in fishes
+~~~python
+fishes = get_set('fishes')
+assert 'nemo' not in fishes
 
-    fishes.add('nemo')
-    assert 'nemo' in fishes
+fishes.add('nemo')
+assert 'nemo' in fishes
 
-    for item in fishes:
-        assert item == 'nemo'
+for item in fishes:
+    assert item == 'nemo'
+~~~
 
 Example of other redis connection::
 
-    setup_system('other', host='127.0.0.1', port=6379)
-    bears = get_list('bears', 'other')
+~~~python
+setup_system('other', host='127.0.0.1', port=6379)
+bears = get_list('bears', 'other')
+~~~
