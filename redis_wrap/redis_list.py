@@ -1,5 +1,4 @@
-
-from redis_systems import *
+from .redis_systems import *
 
 class ListFu (redis_obj):
 
@@ -26,7 +25,7 @@ class ListFu (redis_obj):
 
     def __getitem__(self, key):
         if isinstance(key, slice):
-            return self.conn.lrange(self.name, key.start, key.stop)
+            return self.conn.lrange(self.name, key.start, key.stop-1)
 
         val = self.conn.lindex(self.name, key)
         if not val:
@@ -48,4 +47,3 @@ class ListFu (redis_obj):
             for item in items:
                 yield item
             i += 30
-

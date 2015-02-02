@@ -57,11 +57,11 @@ Example of other redis connection::
 """
 import redis
 
-from redis_systems import *
-from redis_list import ListFu
-from redis_hash import HashFu
-from redis_set import SetFu
-from redis_bitset import BitsetFu
+from .redis_systems import *
+from .redis_list import ListFu
+from .redis_hash import HashFu
+from .redis_set import SetFu
+from .redis_bitset import BitsetFu
 
 #--- Decorators ----------------------------------------------
 def get_list(name, system='default'):

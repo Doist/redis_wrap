@@ -1,5 +1,4 @@
-
-from redis_systems import *
+from .redis_systems import *
 
 class SetFu (redis_obj):
 
@@ -82,4 +81,3 @@ class SetFu (redis_obj):
     def __ior__(self, other):
         self.update(other)
         return self
-

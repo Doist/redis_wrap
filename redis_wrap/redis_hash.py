@@ -1,4 +1,4 @@
-from redis_systems import *
+from .redis_systems import *
 
 class HashFu (redis_obj):
 
@@ -67,4 +67,3 @@ class HashFu (redis_obj):
 
     def __contains__(self, key):
         return self.conn.hexists(self.name, key)
-
