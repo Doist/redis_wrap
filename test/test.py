@@ -1,5 +1,13 @@
+#!/usr/bin/env python2
+# encoding: utf-8
+
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+
 import sys
-from redis_wrap import get_redis, get_list, get_hash, get_set, get_bitset
+
+from redis_wrap import get_bitset, get_hash, get_list, get_redis, get_set
+
 
 def raises(f, excpt):
     try:
@@ -15,7 +23,8 @@ def setup_module(module=None):
     get_redis().delete('villains')
     get_redis().delete('fishes')
 
-    print sys._getframe(0).f_code.co_name, 'ok.'
+    print(sys._getframe(0).f_code.co_name, 'ok.')
+
 
 def test_list():
     bears = get_list('bears')
@@ -23,6 +32,8 @@ def test_list():
 
     bears.append('grizzly')
     assert len(bears) == 1
+    assert bears[0] == 'grizzly'
+    assert bears[-1] == 'grizzly'
 
     for bear in bears:
         assert bear == 'grizzly'
@@ -42,13 +53,19 @@ def test_list():
         pass
 
     bears.extend(['polar bear', 'gummy bear'])
-    assert bears[1:2] == ['white bear', 'nice bear']
-    assert bears[2:4] == ['nice bear', 'polar bear', 'gummy bear']
+    assert list(bears) == ['grizzly', 'white bear', 'nice bear', 'polar bear', 'gummy bear']
+
+    assert bears[1:2] == ['white bear']
+    assert bears[2:4] == ['nice bear', 'polar bear']
+    assert bears[:2] == ['grizzly', 'white bear']
+    assert bears[-2:] == ['polar bear', 'gummy bear']
+    assert bears[10:20] == []
 
     bears.remove('grizzly')
     assert 'grizzly' not in bears
 
-    print sys._getframe(0).f_code.co_name, 'ok.'
+    print(sys._getframe(0).f_code.co_name, 'ok.')
+
 
 def test_list_trim():
     deers = get_list('deers')
@@ -65,7 +82,8 @@ def test_list_trim():
     assert deers[0] == 'rudolf_0'
     assert deers[1] == 'rudolf_1'
 
-    print sys._getframe(0).f_code.co_name, 'ok.'
+    print(sys._getframe(0).f_code.co_name, 'ok.')
+
 
 def test_hash():
     villains = get_hash('villains')
@@ -112,7 +130,8 @@ def test_hash():
         ('lizard','Curt Connors'),
         ('rhino', 'Aleksei Sytsevich')])
 
-    print sys._getframe(0).f_code.co_name, 'ok.'
+    print(sys._getframe(0).f_code.co_name, 'ok.')
+
 
 def test_set():
     fishes = get_set('fishes')
@@ -188,7 +207,9 @@ def test_set():
     fishes.update(('nemo','marlin', 'dory', 'gill', 'bloat'))
     fishes ^= other_fishes
     assert set(fishes) == set(['nemo','marlin', 'dory', 'flo'])
-    print sys._getframe(0).f_code.co_name, 'ok.'
+
+    print(sys._getframe(0).f_code.co_name, 'ok.')
+
 
 def test_bitset():
     users = get_bitset('users')
@@ -220,7 +241,8 @@ def test_bitset():
     users.clear()
     assert len(users) == 0
 
-    print sys._getframe(0).f_code.co_name, 'ok.'
+    print(sys._getframe(0).f_code.co_name, 'ok.')
+
 
 if __name__ == '__main__':
     setup_module()
