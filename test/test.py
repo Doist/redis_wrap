@@ -64,6 +64,19 @@ def test_list():
     bears.remove('grizzly')
     assert 'grizzly' not in bears
 
+    bears.clear()
+    assert len(bears) == 0
+
+    N = 512
+    for i in range(N):
+        bears.append(i)
+    assert len(bears) == N
+
+    back = [e for e in bears]
+    assert len(back) == N
+
+    assert list(bears) == back
+
     print(sys._getframe(0).f_code.co_name, 'ok.')
 
 
