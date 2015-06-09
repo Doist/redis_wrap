@@ -1,5 +1,8 @@
 from .redis_systems import *
 
+N = 30
+
+
 class ListFu (redis_obj):
 
     def append(self, item):
@@ -41,9 +44,9 @@ class ListFu (redis_obj):
     def __iter__(self):
         i = 0
         while True:
-            items = self.conn.lrange(self.name, i, i+30)
+            items = self.conn.lrange(self.name, i, i+N-1)
             if len(items) == 0:
                 raise StopIteration
             for item in items:
                 yield item
-            i += 30
+            i += N
